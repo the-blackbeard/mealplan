@@ -4,6 +4,17 @@ import { getWeekStart, prevWeek, nextWeek, formatWeekLabel, isCurrentWeek } from
 import { useMealPlan } from '../hooks/useMealPlan'
 import WeekGrid from '../components/WeekGrid'
 
+export function makeDragEndHandler(upsertEntry) {
+  return function handleDragEnd({ active, over }) {
+    if (!over) return
+    const parts = over.id.split('-') // ['drop', '2', 'lunch']
+    const dayIndex = parseInt(parts[1], 10)
+    const slot = parts[2]
+    const meal = active.data.current.meal
+    upsertEntry(dayIndex, slot, meal.id, null)
+  }
+}
+
 export default function PlannerPage() {
   const [weekStart, setWeekStart] = useState(getWeekStart())
   const { loading, error, upsertEntry, clearEntry, getEntry } = useMealPlan(weekStart)
