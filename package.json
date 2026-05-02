@@ -8,7 +8,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-    "seed": "node --env-file=.env scripts/seed.js"
+    "seed": "node --env-file=$(dirname $(git rev-parse --git-common-dir))/.env scripts/seed.js"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.39.7",
