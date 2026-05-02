@@ -41,4 +41,14 @@ describe('makeDragEndHandler', () => {
     })
     expect(upsertEntry).toHaveBeenCalledWith(6, 'dinner', 'xyz', null)
   })
+
+  it('does nothing when active has no meal data', () => {
+    const upsertEntry = vi.fn()
+    const handler = makeDragEndHandler(upsertEntry)
+    handler({
+      active: { data: { current: {} } },
+      over: { id: 'drop-2-lunch' },
+    })
+    expect(upsertEntry).not.toHaveBeenCalled()
+  })
 })

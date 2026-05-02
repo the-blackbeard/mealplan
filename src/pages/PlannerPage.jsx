@@ -10,7 +10,8 @@ export function makeDragEndHandler(upsertEntry) {
     const parts = over.id.split('-') // ['drop', '2', 'lunch']
     const dayIndex = parseInt(parts[1], 10)
     const slot = parts[2]
-    const meal = active.data.current.meal
+    const meal = active.data?.current?.meal
+    if (!meal) return
     upsertEntry(dayIndex, slot, meal.id, null)
   }
 }
