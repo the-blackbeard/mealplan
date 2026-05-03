@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { format } from 'date-fns'
 import { getWeekStart, prevWeek, nextWeek, formatWeekLabel, isCurrentWeek } from '../lib/dates'
 import { useMealPlan } from '../hooks/useMealPlan'
 import WeekGrid from '../components/WeekGrid'

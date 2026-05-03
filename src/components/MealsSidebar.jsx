@@ -26,7 +26,7 @@ function DraggableMealCard({ meal }) {
         cursor: 'grab',
         userSelect: 'none',
         opacity: isDragging ? 0.4 : 1,
-        transform: CSS.Translate.toString(transform),
+        transform: transform ? CSS.Translate.toString(transform) : undefined,
         transition: isDragging ? 'none' : 'border-color 0.15s',
         flexShrink: 0,
       }}
