@@ -1,16 +1,18 @@
 import { useState } from 'react'
+import { DndContext, DragOverlay } from '@dnd-kit/core'
 import { getWeekStart, prevWeek, nextWeek, formatWeekLabel, isCurrentWeek } from '../lib/dates'
 import { useMealPlan } from '../hooks/useMealPlan'
 import WeekGrid from '../components/WeekGrid'
+import MealsSidebar from '../components/MealsSidebar'
 
 export function makeDragEndHandler(upsertEntry) {
   return function handleDragEnd({ active, over }) {
     if (!over) return
+    const meal = active.data?.current?.meal
+    if (!meal) return
     const parts = over.id.split('-') // ['drop', '2', 'lunch']
     const dayIndex = parseInt(parts[1], 10)
     const slot = parts[2]
-    const meal = active.data?.current?.meal
-    if (!meal) return
     upsertEntry(dayIndex, slot, meal.id, null)
   }
 }
@@ -18,10 +20,13 @@ export function makeDragEndHandler(upsertEntry) {
 export default function PlannerPage() {
   const [weekStart, setWeekStart] = useState(getWeekStart())
   const { loading, error, upsertEntry, clearEntry, getEntry } = useMealPlan(weekStart)
+  const [activeMeal, setActiveMeal] = useState(null)
   const isThisWeek = isCurrentWeek(weekStart)
 
+  const handleDragEnd = makeDragEndHandler(upsertEntry)
+
   return (
-    <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '32px 24px' }}>
+    <div style={{ maxWidth: '1500px', margin: '0 auto', padding: '32px 24px' }}>
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '32px', flexWrap: 'wrap', gap: '16px' }}>
         <div>
@@ -70,7 +75,7 @@ export default function PlannerPage() {
         Live — changes by your household appear instantly
       </div>
 
-      {/* Grid */}
+      {/* Grid + Sidebar */}
       {loading ? (
         <div style={{
           display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -91,19 +96,49 @@ export default function PlannerPage() {
           Error: {error}
         </div>
       ) : (
-        <div className="card" style={{ padding: '24px' }}>
-          <WeekGrid
-            weekStart={weekStart}
-            onUpsert={upsertEntry}
-            onClear={clearEntry}
-            getEntry={getEntry}
-            editable={true}
-          />
-        </div>
+        <DndContext
+          onDragStart={({ active }) => setActiveMeal(active.data.current?.meal ?? null)}
+          onDragEnd={(e) => { handleDragEnd(e); setActiveMeal(null) }}
+          onDragCancel={() => setActiveMeal(null)}
+        >
+          <div style={{ display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
+            {/* Calendar card */}
+            <div className="card" style={{ flex: 1, minWidth: 0, padding: '24px' }}>
+              <WeekGrid
+                weekStart={weekStart}
+                onUpsert={upsertEntry}
+                onClear={clearEntry}
+                getEntry={getEntry}
+                editable={true}
+              />
+            </div>
+
+            {/* Meals sidebar */}
+            <MealsSidebar />
+          </div>
+
+          <DragOverlay dropAnimation={null}>
+            {activeMeal && (
+              <div style={{
+                padding: '8px 14px',
+                borderRadius: '8px',
+                background: 'var(--brown-dark)',
+                color: 'var(--cream)',
+                fontSize: '0.88rem',
+                fontWeight: '500',
+                boxShadow: 'var(--shadow-md)',
+                cursor: 'grabbing',
+                pointerEvents: 'none',
+              }}>
+                {activeMeal.name}
+              </div>
+            )}
+          </DragOverlay>
+        </DndContext>
       )}
 
       <p style={{ marginTop: '16px', fontSize: '0.8rem', color: 'var(--slate-light)', textAlign: 'center' }}>
-        Click any cell to add or change a meal. Your partner will see updates in real time.
+        Drag meals from the sidebar onto any slot · Click a cell to use the picker · Changes sync in real time
       </p>
     </div>
   )
