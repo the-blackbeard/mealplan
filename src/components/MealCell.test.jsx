@@ -55,7 +55,7 @@ describe('MealCell drop target', () => {
       />
     )
     // container.firstChild is the cell div (first element in the fragment)
-    expect(container.firstChild.getAttribute('style')).toContain('var(--green)')
+    expect(container.firstChild.style.borderColor).toBe('var(--green)')
   })
 
   it('uses dinner accent colour (rust) when isOver on a dinner cell', () => {
@@ -70,7 +70,7 @@ describe('MealCell drop target', () => {
         onClear={vi.fn()}
       />
     )
-    expect(container.firstChild.getAttribute('style')).toContain('var(--rust)')
+    expect(container.firstChild.style.borderColor).toBe('var(--rust)')
   })
 
   it('shows slot-coloured background when isOver, even on an empty cell', () => {
