@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useDroppable } from '@dnd-kit/core'
 import MealPicker from './MealPicker'
 
 const SLOT_META = {
@@ -10,6 +11,7 @@ const SLOT_META = {
 export default function MealCell({ slot, dayIndex, dayLabel, entry, onUpsert, onClear, editable = true }) {
   const [pickerOpen, setPickerOpen] = useState(false)
   const meta = SLOT_META[slot]
+  const { setNodeRef, isOver } = useDroppable({ id: `drop-${dayIndex}-${slot}` })
 
   async function handleSelect(meal) {
     await onUpsert(dayIndex, slot, meal.id, null)
@@ -26,13 +28,15 @@ export default function MealCell({ slot, dayIndex, dayLabel, entry, onUpsert, on
   return (
     <>
       <div
+        ref={setNodeRef}
         onClick={() => editable && setPickerOpen(true)}
         style={{
           minHeight: '72px',
           padding: '10px 12px',
           borderRadius: '10px',
-          border: `1.5px solid ${hasMeal ? 'transparent' : 'var(--cream-mid)'}`,
-          background: hasMeal ? meta.bg : 'var(--cream)',
+          border: `1.5px solid ${isOver ? meta.color : (hasMeal ? 'transparent' : 'var(--cream-mid)')}`,
+          borderColor: isOver ? meta.color : (hasMeal ? 'transparent' : 'var(--cream-mid)'),
+          background: hasMeal || isOver ? meta.bg : 'var(--cream)',
           cursor: editable ? 'pointer' : 'default',
           position: 'relative',
           transition: 'all 0.15s ease',
@@ -40,17 +44,20 @@ export default function MealCell({ slot, dayIndex, dayLabel, entry, onUpsert, on
           flexDirection: 'column',
           justifyContent: hasMeal ? 'space-between' : 'center',
           alignItems: hasMeal ? 'flex-start' : 'center',
-          gap: '4px'
+          gap: '4px',
+          boxShadow: isOver ? `0 0 0 3px ${meta.bg}` : 'none',
         }}
         onMouseEnter={e => {
-          if (editable) {
+          if (editable && !isOver) {
             e.currentTarget.style.borderColor = meta.color
             e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.06)'
           }
         }}
         onMouseLeave={e => {
-          e.currentTarget.style.borderColor = hasMeal ? 'transparent' : 'var(--cream-mid)'
-          e.currentTarget.style.boxShadow = 'none'
+          if (!isOver) {
+            e.currentTarget.style.borderColor = hasMeal ? 'transparent' : 'var(--cream-mid)'
+            e.currentTarget.style.boxShadow = 'none'
+          }
         }}
       >
         {hasMeal ? (
