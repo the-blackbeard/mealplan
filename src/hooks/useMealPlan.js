@@ -70,6 +70,7 @@ export function useMealPlan(weekStart) {
 
   async function addEntry(dayOfWeek, slot, mealId) {
     if (!mealPlan) return { error: 'No meal plan loaded' }
+    if (!mealId) return { error: 'mealId required' }
     const { data: { user } } = await supabase.auth.getUser()
     const { error } = await supabase
       .from('meal_plan_entries')
@@ -86,6 +87,7 @@ export function useMealPlan(weekStart) {
   }
 
   async function removeEntry(entryId) {
+    if (!mealPlan) return { error: 'No meal plan loaded' }
     const { error } = await supabase
       .from('meal_plan_entries')
       .delete()
