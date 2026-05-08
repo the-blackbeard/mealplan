@@ -6,13 +6,13 @@ import WeekGrid from '../components/WeekGrid'
 
 function HistoryWeekView({ weekStr }) {
   const weekStart = stringToWeekStart(weekStr)
-  const { loading, getEntry } = useMealPlan(weekStart)
+  const { loading, getEntries } = useMealPlan(weekStart)
 
   if (loading) return <div style={{ color: 'var(--slate-light)', padding: '20px', textAlign: 'center' }}>Loading…</div>
 
   return (
     <div className="card" style={{ padding: '24px' }}>
-      <WeekGrid weekStart={weekStart} onUpsert={() => {}} onClear={() => {}} getEntry={getEntry} editable={false} />
+      <WeekGrid weekStart={weekStart} onAdd={() => {}} onRemove={() => {}} getEntries={getEntries} editable={false} />
     </div>
   )
 }
