@@ -5,6 +5,7 @@ import HouseholdSetup from './pages/HouseholdSetup'
 import PlannerPage from './pages/PlannerPage'
 import HistoryPage from './pages/HistoryPage'
 import MealsPage from './pages/MealsPage'
+import MealDetailPage from './pages/MealDetailPage'
 import SettingsPage from './pages/SettingsPage'
 import Navbar from './components/Navbar'
 
@@ -38,6 +39,7 @@ function AppRoutes() {
         <Route path="/" element={<PlannerPage />} />
         <Route path="/history" element={<HistoryPage />} />
         <Route path="/meals" element={<MealsPage />} />
+        <Route path="/meals/:id" element={<MealDetailPage />} />
         <Route path="/settings" element={<SettingsPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
