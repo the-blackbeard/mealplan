@@ -20,7 +20,7 @@ export function useMeals() {
 
   useEffect(() => { fetchMeals() }, [fetchMeals])
 
-  async function createMeal(name, description = '', tags = []) {
+  async function createMeal(name, { description = '', recipe = '', caloriesPerPortion = null, proteinPerPortion = null } = {}) {
     if (!household || !user) return { error: 'Not authenticated' }
     const { data, error } = await supabase
       .from('meals')
@@ -28,7 +28,9 @@ export function useMeals() {
         household_id: household.id,
         name: name.trim(),
         description,
-        tags,
+        recipe: recipe || null,
+        calories_per_portion: caloriesPerPortion,
+        protein_per_portion: proteinPerPortion,
         created_by: user.id
       })
       .select()
@@ -38,11 +40,22 @@ export function useMeals() {
     return { data, error }
   }
 
+  async function updateMeal(id, fields) {
+    const { data, error } = await supabase
+      .from('meals')
+      .update(fields)
+      .eq('id', id)
+      .select()
+      .single()
+    if (!error) setMeals(prev => prev.map(m => m.id === id ? data : m))
+    return { data, error }
+  }
+
   async function deleteMeal(id) {
     const { error } = await supabase.from('meals').delete().eq('id', id)
     if (!error) setMeals(prev => prev.filter(m => m.id !== id))
     return { error }
   }
 
-  return { meals, loading, createMeal, deleteMeal, refetch: fetchMeals }
+  return { meals, loading, createMeal, updateMeal, deleteMeal, refetch: fetchMeals }
 }
