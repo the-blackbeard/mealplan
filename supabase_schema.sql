@@ -26,6 +26,9 @@ CREATE TABLE meals (
   household_id UUID NOT NULL REFERENCES households(id) ON DELETE CASCADE,
   name TEXT NOT NULL,
   description TEXT,
+  recipe TEXT,
+  calories_per_portion INTEGER,
+  protein_per_portion INTEGER,
   tags TEXT[],
   created_by UUID REFERENCES profiles(id) ON DELETE SET NULL,
   created_at TIMESTAMPTZ DEFAULT now(),
@@ -42,7 +45,7 @@ CREATE TABLE meal_plans (
   UNIQUE(household_id, week_start)
 );
 
--- 5. Meal plan entries: one per day+slot combination
+-- 5. Meal plan entries: multiple meals per day+slot allowed
 CREATE TABLE meal_plan_entries (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   meal_plan_id UUID NOT NULL REFERENCES meal_plans(id) ON DELETE CASCADE,
@@ -52,7 +55,7 @@ CREATE TABLE meal_plan_entries (
   custom_note TEXT,
   updated_by UUID REFERENCES profiles(id) ON DELETE SET NULL,
   updated_at TIMESTAMPTZ DEFAULT now(),
-  UNIQUE(meal_plan_id, day_of_week, slot)
+  UNIQUE(meal_plan_id, day_of_week, slot, meal_id)
 );
 
 -- ============================================================

@@ -1,103 +1,95 @@
 import { useState } from 'react'
-import MealPicker from './MealPicker'
+import { useDroppable } from '@dnd-kit/core'
+import SlotModal from './SlotModal'
 
 const SLOT_META = {
-  breakfast: { emoji: '☀️', label: 'Breakfast', color: '#e8a020', bg: '#fef9ec' },
+  breakfast: { emoji: '☀️', label: 'Breakfast', color: 'var(--gold)', bg: 'var(--gold-light)' },
   lunch: { emoji: '🌤️', label: 'Lunch', color: 'var(--green)', bg: 'var(--green-light)' },
   dinner: { emoji: '🌙', label: 'Dinner', color: 'var(--rust)', bg: 'var(--rust-light)' }
 }
 
-export default function MealCell({ slot, dayIndex, dayLabel, entry, onUpsert, onClear, editable = true }) {
-  const [pickerOpen, setPickerOpen] = useState(false)
+export default function MealCell({ slot, dayIndex, dayLabel, entries = [], onAdd, onRemove, editable = true }) {
+  const [modalOpen, setModalOpen] = useState(false)
   const meta = SLOT_META[slot]
+  const { setNodeRef, isOver } = useDroppable({ id: `drop-${dayIndex}-${slot}` })
 
-  async function handleSelect(meal) {
-    await onUpsert(dayIndex, slot, meal.id, null)
-    setPickerOpen(false)
-  }
-
-  async function handleClear(e) {
-    e.stopPropagation()
-    await onClear(dayIndex, slot)
-  }
-
-  const hasMeal = entry?.meal || entry?.custom_note
+  const hasEntries = entries.length > 0
+  const visibleEntries = entries.slice(0, 2)
+  const extraCount = entries.length > 2 ? entries.length - 2 : 0
 
   return (
     <>
       <div
-        onClick={() => editable && setPickerOpen(true)}
+        ref={setNodeRef}
+        role="button"
+        aria-label={`${meta.label} for ${dayLabel}`}
+        onClick={() => editable && setModalOpen(true)}
         style={{
           minHeight: '72px',
           padding: '10px 12px',
           borderRadius: '10px',
-          border: `1.5px solid ${hasMeal ? 'transparent' : 'var(--cream-mid)'}`,
-          background: hasMeal ? meta.bg : 'var(--cream)',
+          borderWidth: '1.5px',
+          borderStyle: 'solid',
+          borderColor: isOver ? meta.color : (hasEntries ? 'transparent' : 'var(--cream-mid)'),
+          background: hasEntries || isOver ? meta.bg : 'var(--cream)',
           cursor: editable ? 'pointer' : 'default',
           position: 'relative',
           transition: 'all 0.15s ease',
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: hasMeal ? 'space-between' : 'center',
-          alignItems: hasMeal ? 'flex-start' : 'center',
-          gap: '4px'
+          justifyContent: hasEntries ? 'space-between' : 'center',
+          alignItems: hasEntries ? 'flex-start' : 'center',
+          gap: '4px',
+          boxShadow: isOver ? `0 0 0 3px ${meta.bg}` : 'none',
         }}
         onMouseEnter={e => {
-          if (editable) {
+          if (editable && !isOver) {
             e.currentTarget.style.borderColor = meta.color
-            e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.06)'
+            e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.06)' // subtle lift, no token
           }
         }}
         onMouseLeave={e => {
-          e.currentTarget.style.borderColor = hasMeal ? 'transparent' : 'var(--cream-mid)'
-          e.currentTarget.style.boxShadow = 'none'
+          if (!isOver) {
+            e.currentTarget.style.borderColor = hasEntries ? 'transparent' : 'var(--cream-mid)'
+            e.currentTarget.style.boxShadow = 'none'
+          }
         }}
       >
-        {hasMeal ? (
-          <>
-            <div style={{ width: '100%' }}>
-              <p style={{
-                fontSize: '0.88rem', fontWeight: '600', color: 'var(--slate)',
-                lineHeight: '1.3', wordBreak: 'break-word'
-              }}>
-                {entry.meal?.name || entry.custom_note}
+        {hasEntries ? (
+          <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '3px' }}>
+            {visibleEntries.map(entry => (
+              <p
+                key={entry.id}
+                style={{
+                  fontSize: '0.88rem',
+                  fontWeight: '600',
+                  color: 'var(--slate)',
+                  lineHeight: '1.3',
+                  wordBreak: 'break-word',
+                  margin: 0,
+                }}
+              >
+                {entry.meal?.name}
               </p>
-              {entry.meal?.description && (
-                <p style={{ fontSize: '0.74rem', color: 'var(--slate-mid)', marginTop: '2px' }}>
-                  {entry.meal.description}
-                </p>
-              )}
-              {entry.updater && (
-                <p style={{ fontSize: '0.7rem', color: meta.color, marginTop: '4px', opacity: 0.8 }}>
-                  by {entry.updater.display_name}
-                </p>
-              )}
-            </div>
-            {editable && (
-              <div style={{ display: 'flex', gap: '4px', marginTop: '4px' }}>
-                <button
-                  onClick={e => { e.stopPropagation(); setPickerOpen(true) }}
-                  style={{
-                    fontSize: '0.7rem', padding: '2px 7px', borderRadius: '5px',
-                    background: 'rgba(255,255,255,0.7)', border: 'none', cursor: 'pointer',
-                    color: 'var(--slate-mid)', fontFamily: 'var(--font-body)'
-                  }}
-                >
-                  Change
-                </button>
-                <button
-                  onClick={handleClear}
-                  style={{
-                    fontSize: '0.7rem', padding: '2px 7px', borderRadius: '5px',
-                    background: 'rgba(255,255,255,0.7)', border: 'none', cursor: 'pointer',
-                    color: 'var(--rust)', fontFamily: 'var(--font-body)'
-                  }}
-                >
-                  Clear
-                </button>
-              </div>
+            ))}
+            {extraCount > 0 && (
+              <span
+                style={{
+                  display: 'inline-block',
+                  fontSize: '0.72rem',
+                  fontWeight: '600',
+                  color: meta.color,
+                  background: 'rgba(255,255,255,0.7)', // semi-transparent white overlay, no token
+                  borderRadius: '10px',
+                  padding: '1px 7px',
+                  alignSelf: 'flex-start',
+                  marginTop: '2px',
+                }}
+              >
+                +{extraCount} more
+              </span>
             )}
-          </>
+          </div>
         ) : (
           editable ? (
             <div style={{ textAlign: 'center', color: 'var(--slate-light)', fontSize: '0.82rem' }}>
@@ -110,12 +102,15 @@ export default function MealCell({ slot, dayIndex, dayLabel, entry, onUpsert, on
         )}
       </div>
 
-      {pickerOpen && (
-        <MealPicker
+      {modalOpen && (
+        <SlotModal
           slot={slot}
+          dayIndex={dayIndex}
           dayLabel={dayLabel}
-          onSelect={handleSelect}
-          onClose={() => setPickerOpen(false)}
+          entries={entries}
+          onAdd={onAdd}
+          onRemove={onRemove}
+          onClose={() => setModalOpen(false)}
         />
       )}
     </>

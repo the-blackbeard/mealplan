@@ -21,7 +21,7 @@ export default function MealPicker({ slot, dayLabel, onSelect, onClose }) {
     e.preventDefault()
     if (!newMealName.trim()) return
     setSaving(true); setError('')
-    const { data, error } = await createMeal(newMealName, newMealDesc)
+    const { data, error } = await createMeal(newMealName, { description: newMealDesc })
     if (error) {
       setError(error.message.includes('unique') ? 'A meal with this name already exists.' : error.message)
     } else {

@@ -8,7 +8,7 @@ const SLOT_META = {
   dinner: { emoji: '🌙', label: 'Dinner' }
 }
 
-export default function WeekGrid({ weekStart, entries, onUpsert, onClear, getEntry, editable = true }) {
+export default function WeekGrid({ weekStart, entries, onAdd, onRemove, getEntries, editable = true }) {
   const days = getWeekDays(weekStart)
   const today = format(new Date(), 'yyyy-MM-dd')
 
@@ -65,9 +65,9 @@ export default function WeekGrid({ weekStart, entries, onUpsert, onClear, getEnt
                 slot={slot}
                 dayIndex={i}
                 dayLabel={`${DAYS[i]}, ${format(day, 'MMM d')}`}
-                entry={getEntry(i, slot)}
-                onUpsert={onUpsert}
-                onClear={onClear}
+                entries={getEntries(i, slot)}
+                onAdd={onAdd}
+                onRemove={onRemove}
                 editable={editable}
               />
             ))}

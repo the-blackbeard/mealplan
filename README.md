@@ -157,7 +157,12 @@ mealplan/
 ├── .env.example          # Environment variable template
 ├── vercel.json           # Vercel SPA routing
 ├── netlify.toml          # Netlify SPA routing
-└── vite.config.js
+├── vite.config.js
+└── .claude/
+    ├── settings.local.json          # Local Claude Code permissions (gitignored)
+    └── skills/
+        └── mealplan-learnings/
+            └── SKILL.md             # AI agent runbook — project gotchas & patterns
 ```
 
 ---
@@ -173,6 +178,16 @@ mealplan/
 | `meal_plan_entries` | One per day+slot combo in a week |
 
 Row Level Security ensures users only see data belonging to their household.
+
+---
+
+---
+
+## 🤖 AI Agent Tooling
+
+This project ships a Claude Code skill at [.claude/skills/mealplan-learnings/](.claude/skills/mealplan-learnings/) — a living runbook of project-specific gotchas, enforced patterns, and hard-won learnings for AI agents working on the codebase.
+
+Run `/mealplan-learnings` in any Claude Code session to load it. Agents should update the skill when they discover something non-obvious.
 
 ---
 

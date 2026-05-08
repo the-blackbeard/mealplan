@@ -1,0 +1,166 @@
+<h2>How should the meals sidebar appear?</h2>
+<p class="subtitle">The calendar grid needs ~1080px minimum. Pick the layout that feels right for adding meals by drag & drop.</p>
+
+<div class="cards">
+
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding:16px;background:#faf6f0;border-radius:8px;">
+      <div style="display:flex;gap:8px;font-size:11px;">
+        <!-- Navbar -->
+        <div style="flex:1;">
+          <div class="mock-nav" style="margin-bottom:8px;font-size:10px;">TableWeek</div>
+          <!-- Main layout: calendar + sidebar -->
+          <div style="display:flex;gap:6px;">
+            <!-- Calendar -->
+            <div style="flex:1;background:#fff;border:1px solid #e8ddd0;border-radius:6px;padding:8px;">
+              <div style="font-size:9px;font-weight:600;color:#7a6a60;margin-bottom:6px;">📅 Week Plan</div>
+              <div style="display:grid;grid-template-columns:30px repeat(4,1fr);gap:3px;">
+                <div></div>
+                <div style="text-align:center;font-size:8px;color:#7a6a60;">Mon</div>
+                <div style="text-align:center;font-size:8px;color:#7a6a60;">Tue</div>
+                <div style="text-align:center;font-size:8px;color:#7a6a60;">Wed</div>
+                <div style="text-align:center;font-size:8px;color:#7a6a60;">Thu</div>
+                <div style="font-size:7px;color:#b5a89e;">☀️ B</div>
+                <div style="height:18px;background:#fef9ec;border-radius:3px;border:1px solid #e8ddd0;"></div>
+                <div style="height:18px;background:#fef9ec;border-radius:3px;border:1px solid #e8ddd0;font-size:7px;padding:2px;overflow:hidden;color:#5c3d20;">Sandwich</div>
+                <div style="height:18px;background:#fef9ec;border-radius:3px;border:1px solid #e8ddd0;"></div>
+                <div style="height:18px;background:#fef9ec;border-radius:3px;border:1px solid #e8ddd0;"></div>
+                <div style="font-size:7px;color:#b5a89e;">🌤️ L</div>
+                <div style="height:18px;background:#d4e8db;border-radius:3px;border:1px solid #e8ddd0;"></div>
+                <div style="height:18px;background:#d4e8db;border-radius:3px;border:1px solid #e8ddd0;"></div>
+                <div style="height:18px;background:#d4e8db;border-radius:3px;border:1px solid #e8ddd0;font-size:7px;padding:2px;overflow:hidden;color:#4a7c59;">Salad</div>
+                <div style="height:18px;background:#d4e8db;border-radius:3px;border:1px solid #e8ddd0;"></div>
+                <div style="font-size:7px;color:#b5a89e;">🌙 D</div>
+                <div style="height:18px;background:#f5e0d4;border-radius:3px;border:1px solid #e8ddd0;font-size:7px;padding:2px;overflow:hidden;color:#c4541a;">Pasta</div>
+                <div style="height:18px;background:#f5e0d4;border-radius:3px;border:1px solid #e8ddd0;"></div>
+                <div style="height:18px;background:#f5e0d4;border-radius:3px;border:1px solid #e8ddd0;"></div>
+                <div style="height:18px;background:#f5e0d4;border-radius:3px;border:1px solid #e8ddd0;"></div>
+              </div>
+            </div>
+            <!-- Sidebar always visible -->
+            <div style="width:80px;background:#fff;border:1px solid #e8ddd0;border-radius:6px;padding:8px;flex-shrink:0;">
+              <div style="font-size:8px;font-weight:600;color:#5c3d20;margin-bottom:6px;">🍽 Meals</div>
+              <div style="display:flex;flex-direction:column;gap:3px;">
+                <div style="background:#faf6f0;border:1px solid #e8ddd0;border-radius:3px;padding:4px 5px;font-size:7.5px;color:#3d3530;cursor:grab;">🥪 Sandwich</div>
+                <div style="background:#faf6f0;border:1px solid #e8ddd0;border-radius:3px;padding:4px 5px;font-size:7.5px;color:#3d3530;cursor:grab;">🥗 Salad</div>
+                <div style="background:#faf6f0;border:1px solid #e8ddd0;border-radius:3px;padding:4px 5px;font-size:7.5px;color:#3d3530;cursor:grab;">🍝 Pasta</div>
+                <div style="background:#faf6f0;border:1px solid #e8ddd0;border-radius:3px;padding:4px 5px;font-size:7.5px;color:#3d3530;cursor:grab;">🍜 Ramen</div>
+                <div style="background:#faf6f0;border:1px solid #e8ddd0;border-radius:3px;padding:4px 5px;font-size:7.5px;color:#3d3530;cursor:grab;">🥘 Curry</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A — Always-Visible Sidebar</h3>
+      <p>Fixed panel sits to the right of the calendar at all times. Page becomes wider (calendar + sidebar). Clean, no extra click needed.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding:16px;background:#faf6f0;border-radius:8px;">
+      <div style="display:flex;gap:8px;font-size:11px;">
+        <div style="flex:1;">
+          <div class="mock-nav" style="margin-bottom:8px;font-size:10px;">TableWeek</div>
+          <div style="position:relative;">
+            <!-- Calendar full width -->
+            <div style="background:#fff;border:1px solid #e8ddd0;border-radius:6px;padding:8px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+                <div style="font-size:9px;font-weight:600;color:#7a6a60;">📅 Week Plan</div>
+                <div style="font-size:8px;background:#5c3d20;color:#faf6f0;padding:2px 7px;border-radius:4px;cursor:pointer;">🍽 Meals →</div>
+              </div>
+              <div style="display:grid;grid-template-columns:30px repeat(4,1fr);gap:3px;">
+                <div></div>
+                <div style="text-align:center;font-size:8px;color:#7a6a60;">Mon</div>
+                <div style="text-align:center;font-size:8px;color:#7a6a60;">Tue</div>
+                <div style="text-align:center;font-size:8px;color:#7a6a60;">Wed</div>
+                <div style="text-align:center;font-size:8px;color:#7a6a60;">Thu</div>
+                <div style="font-size:7px;color:#b5a89e;">☀️</div>
+                <div style="height:18px;background:#fef9ec;border-radius:3px;border:1px solid #e8ddd0;"></div>
+                <div style="height:18px;background:#fef9ec;border-radius:3px;border:1px solid #e8ddd0;font-size:7px;padding:2px;color:#5c3d20;">Tea</div>
+                <div style="height:18px;background:#fef9ec;border-radius:3px;border:1px solid #e8ddd0;"></div>
+                <div style="height:18px;background:#fef9ec;border-radius:3px;border:1px solid #e8ddd0;"></div>
+                <div style="font-size:7px;color:#b5a89e;">🌤️</div>
+                <div style="height:18px;background:#d4e8db;border-radius:3px;border:1px solid #e8ddd0;"></div>
+                <div style="height:18px;background:#d4e8db;border-radius:3px;border:1px solid #e8ddd0;"></div>
+                <div style="height:18px;background:#d4e8db;border-radius:3px;border:1px solid #e8ddd0;"></div>
+                <div style="height:18px;background:#d4e8db;border-radius:3px;border:1px solid #e8ddd0;"></div>
+                <div style="font-size:7px;color:#b5a89e;">🌙</div>
+                <div style="height:18px;background:#f5e0d4;border-radius:3px;border:1px solid #e8ddd0;"></div>
+                <div style="height:18px;background:#f5e0d4;border-radius:3px;border:1px solid #e8ddd0;"></div>
+                <div style="height:18px;background:#f5e0d4;border-radius:3px;border:1px solid #e8ddd0;"></div>
+                <div style="height:18px;background:#f5e0d4;border-radius:3px;border:1px solid #e8ddd0;"></div>
+              </div>
+            </div>
+            <!-- Slide-in panel overlay on right -->
+            <div style="position:absolute;top:0;right:0;width:90px;height:100%;background:#fff;border:1px solid #e8ddd0;border-radius:6px;padding:8px;box-shadow:-4px 0 12px rgba(0,0,0,0.1);">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+                <div style="font-size:8px;font-weight:600;color:#5c3d20;">Meals</div>
+                <div style="font-size:9px;color:#b5a89e;cursor:pointer;">✕</div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:3px;">
+                <div style="background:#faf6f0;border:1px solid #e8ddd0;border-radius:3px;padding:4px 5px;font-size:7.5px;cursor:grab;">🥪 Sandwich</div>
+                <div style="background:#faf6f0;border:1px solid #e8ddd0;border-radius:3px;padding:4px 5px;font-size:7.5px;cursor:grab;">🍵 Tea</div>
+                <div style="background:#faf6f0;border:1px solid #e8ddd0;border-radius:3px;padding:4px 5px;font-size:7.5px;cursor:grab;">🍝 Pasta</div>
+                <div style="background:#faf6f0;border:1px solid #e8ddd0;border-radius:3px;padding:4px 5px;font-size:7.5px;cursor:grab;">🥗 Salad</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B — Slide-In Panel (Toggle)</h3>
+      <p>Calendar takes full width by default. A "Meals →" button opens a panel that overlays the right edge of the calendar. Less space needed.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding:16px;background:#faf6f0;border-radius:8px;">
+      <div style="display:flex;gap:8px;font-size:11px;">
+        <div style="flex:1;">
+          <div class="mock-nav" style="margin-bottom:8px;font-size:10px;">TableWeek</div>
+          <!-- Stacked: calendar on top, meals bar below -->
+          <div style="background:#fff;border:1px solid #e8ddd0;border-radius:6px;padding:8px;margin-bottom:6px;">
+            <div style="font-size:9px;font-weight:600;color:#7a6a60;margin-bottom:6px;">📅 Week Plan</div>
+            <div style="display:grid;grid-template-columns:30px repeat(4,1fr);gap:3px;">
+              <div></div>
+              <div style="text-align:center;font-size:8px;color:#7a6a60;">Mon</div>
+              <div style="text-align:center;font-size:8px;color:#7a6a60;">Tue</div>
+              <div style="text-align:center;font-size:8px;color:#7a6a60;">Wed</div>
+              <div style="text-align:center;font-size:8px;color:#7a6a60;">Thu</div>
+              <div style="font-size:7px;color:#b5a89e;">☀️</div>
+              <div style="height:18px;background:#fef9ec;border-radius:3px;border:1px solid #e8ddd0;"></div>
+              <div style="height:18px;background:#fef9ec;border-radius:3px;border:1px solid #e8ddd0;"></div>
+              <div style="height:18px;background:#fef9ec;border-radius:3px;border:1px solid #e8ddd0;"></div>
+              <div style="height:18px;background:#fef9ec;border-radius:3px;border:1px solid #e8ddd0;"></div>
+              <div style="font-size:7px;color:#b5a89e;">🌙</div>
+              <div style="height:18px;background:#f5e0d4;border-radius:3px;border:1px solid #e8ddd0;"></div>
+              <div style="height:18px;background:#f5e0d4;border-radius:3px;border:1px solid #e8ddd0;"></div>
+              <div style="height:18px;background:#f5e0d4;border-radius:3px;border:1px solid #e8ddd0;"></div>
+              <div style="height:18px;background:#f5e0d4;border-radius:3px;border:1px solid #e8ddd0;"></div>
+            </div>
+          </div>
+          <!-- Horizontal meals tray below -->
+          <div style="background:#fff;border:1px solid #e8ddd0;border-radius:6px;padding:8px;">
+            <div style="font-size:8px;font-weight:600;color:#5c3d20;margin-bottom:5px;">🍽 Drag a meal onto the calendar above</div>
+            <div style="display:flex;gap:4px;overflow-x:auto;">
+              <div style="background:#faf6f0;border:1px solid #e8ddd0;border-radius:4px;padding:5px 8px;font-size:7.5px;white-space:nowrap;cursor:grab;flex-shrink:0;">🥪 Sandwich</div>
+              <div style="background:#faf6f0;border:1px solid #e8ddd0;border-radius:4px;padding:5px 8px;font-size:7.5px;white-space:nowrap;cursor:grab;flex-shrink:0;">🍵 Tea</div>
+              <div style="background:#faf6f0;border:1px solid #e8ddd0;border-radius:4px;padding:5px 8px;font-size:7.5px;white-space:nowrap;cursor:grab;flex-shrink:0;">🍝 Pasta</div>
+              <div style="background:#faf6f0;border:1px solid #e8ddd0;border-radius:4px;padding:5px 8px;font-size:7.5px;white-space:nowrap;cursor:grab;flex-shrink:0;">🥗 Salad</div>
+              <div style="background:#faf6f0;border:1px solid #e8ddd0;border-radius:4px;padding:5px 8px;font-size:7.5px;white-space:nowrap;cursor:grab;flex-shrink:0;">🥘 Curry</div>
+              <div style="background:#faf6f0;border:1px solid #e8ddd0;border-radius:4px;padding:5px 8px;font-size:7.5px;white-space:nowrap;cursor:grab;flex-shrink:0;">🍜 Ramen</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C — Horizontal Meals Tray (Below)</h3>
+      <p>Meals appear in a scrollable row beneath the calendar. Full calendar width preserved. Works better on narrow screens too.</p>
+    </div>
+  </div>
+
+</div>

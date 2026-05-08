@@ -20,7 +20,7 @@ export function useMeals() {
 
   useEffect(() => { fetchMeals() }, [fetchMeals])
 
-  async function createMeal(name, description = '', tags = []) {
+  async function createMeal(name, { description = '', recipe = '', caloriesPerPortion = null, proteinPerPortion = null } = {}) {
     if (!household || !user) return { error: 'Not authenticated' }
     const { data, error } = await supabase
       .from('meals')
@@ -28,7 +28,9 @@ export function useMeals() {
         household_id: household.id,
         name: name.trim(),
         description,
-        tags,
+        recipe: recipe || null,
+        calories_per_portion: caloriesPerPortion,
+        protein_per_portion: proteinPerPortion,
         created_by: user.id
       })
       .select()
@@ -38,11 +40,30 @@ export function useMeals() {
     return { data, error }
   }
 
+  async function updateMeal(id, { name, description, recipe, caloriesPerPortion, proteinPerPortion } = {}) {
+    if (!household || !user) return { error: 'Not authenticated' }
+    const payload = {}
+    if (name !== undefined) payload.name = name.trim()
+    if (description !== undefined) payload.description = description
+    if (recipe !== undefined) payload.recipe = recipe || null
+    if (caloriesPerPortion !== undefined) payload.calories_per_portion = caloriesPerPortion
+    if (proteinPerPortion !== undefined) payload.protein_per_portion = proteinPerPortion
+
+    const { data, error } = await supabase
+      .from('meals')
+      .update(payload)
+      .eq('id', id)
+      .select()
+      .single()
+    if (!error) setMeals(prev => prev.map(m => m.id === id ? data : m))
+    return { data, error }
+  }
+
   async function deleteMeal(id) {
     const { error } = await supabase.from('meals').delete().eq('id', id)
     if (!error) setMeals(prev => prev.filter(m => m.id !== id))
     return { error }
   }
 
-  return { meals, loading, createMeal, deleteMeal, refetch: fetchMeals }
+  return { meals, loading, createMeal, updateMeal, deleteMeal, refetch: fetchMeals }
 }
