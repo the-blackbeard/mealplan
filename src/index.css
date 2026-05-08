@@ -13,6 +13,8 @@
   --green-light: #d4e8db;
   --rust: #c4541a;
   --rust-light: #f5e0d4;
+  --gold: #e8a020;
+  --gold-light: #fef9ec;
   --slate: #3d3530;
   --slate-mid: #7a6a60;
   --slate-light: #b5a89e;
@@ -124,7 +126,7 @@ input, textarea, select {
 }
 
 /* Slot color themes */
-.slot-breakfast { --slot-color: #e8a020; --slot-bg: #fef9ec; }
+.slot-breakfast { --slot-color: var(--gold); --slot-bg: var(--gold-light); }
 .slot-lunch     { --slot-color: var(--green); --slot-bg: var(--green-light); }
 .slot-dinner    { --slot-color: var(--rust); --slot-bg: var(--rust-light); }
 

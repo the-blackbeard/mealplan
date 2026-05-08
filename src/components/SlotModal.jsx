@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useMeals } from '../hooks/useMeals'
 
 const SLOT_META = {
-  breakfast: { emoji: '☀️', label: 'Breakfast', color: '#e8a020', bg: '#fef9ec' },
+  breakfast: { emoji: '☀️', label: 'Breakfast', color: 'var(--gold)', bg: 'var(--gold-light)' },
   lunch: { emoji: '🌤️', label: 'Lunch', color: 'var(--green)', bg: 'var(--green-light)' },
   dinner: { emoji: '🌙', label: 'Dinner', color: 'var(--rust)', bg: 'var(--rust-light)' }
 }
@@ -79,6 +79,7 @@ export default function SlotModal({ slot, dayIndex, dayLabel, entries, onAdd, on
 
   function goToCreate() {
     setCreateForm(prev => ({ ...prev, name: search }))
+    setCreateError('')
     setMode('create')
   }
 
@@ -353,10 +354,11 @@ export default function SlotModal({ slot, dayIndex, dayLabel, entries, onAdd, on
         {/* Create form */}
         <form onSubmit={handleCreate} style={{ padding: '12px 14px 14px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
           <div>
-            <label style={{ fontSize: '0.78rem', fontWeight: '600', color: 'var(--slate-mid)', display: 'block', marginBottom: '4px' }}>
+            <label htmlFor="create-meal-name" style={{ fontSize: '0.78rem', fontWeight: '600', color: 'var(--slate-mid)', display: 'block', marginBottom: '4px' }}>
               Name *
             </label>
             <input
+              id="create-meal-name"
               className="input"
               required
               value={createForm.name}
@@ -366,10 +368,11 @@ export default function SlotModal({ slot, dayIndex, dayLabel, entries, onAdd, on
           </div>
 
           <div>
-            <label style={{ fontSize: '0.78rem', fontWeight: '600', color: 'var(--slate-mid)', display: 'block', marginBottom: '4px' }}>
+            <label htmlFor="create-meal-description" style={{ fontSize: '0.78rem', fontWeight: '600', color: 'var(--slate-mid)', display: 'block', marginBottom: '4px' }}>
               Description
             </label>
             <input
+              id="create-meal-description"
               className="input"
               value={createForm.description}
               onChange={e => setCreateForm(prev => ({ ...prev, description: e.target.value }))}
@@ -378,10 +381,11 @@ export default function SlotModal({ slot, dayIndex, dayLabel, entries, onAdd, on
           </div>
 
           <div>
-            <label style={{ fontSize: '0.78rem', fontWeight: '600', color: 'var(--slate-mid)', display: 'block', marginBottom: '4px' }}>
+            <label htmlFor="create-meal-recipe" style={{ fontSize: '0.78rem', fontWeight: '600', color: 'var(--slate-mid)', display: 'block', marginBottom: '4px' }}>
               Recipe
             </label>
             <textarea
+              id="create-meal-recipe"
               className="input"
               rows={3}
               value={createForm.recipe}
@@ -393,10 +397,11 @@ export default function SlotModal({ slot, dayIndex, dayLabel, entries, onAdd, on
 
           <div style={{ display: 'flex', gap: '8px' }}>
             <div style={{ flex: 1 }}>
-              <label style={{ fontSize: '0.78rem', fontWeight: '600', color: 'var(--slate-mid)', display: 'block', marginBottom: '4px' }}>
+              <label htmlFor="create-meal-calories" style={{ fontSize: '0.78rem', fontWeight: '600', color: 'var(--slate-mid)', display: 'block', marginBottom: '4px' }}>
                 Calories
               </label>
               <input
+                id="create-meal-calories"
                 className="input"
                 type="number"
                 min="0"
@@ -406,10 +411,11 @@ export default function SlotModal({ slot, dayIndex, dayLabel, entries, onAdd, on
               />
             </div>
             <div style={{ flex: 1 }}>
-              <label style={{ fontSize: '0.78rem', fontWeight: '600', color: 'var(--slate-mid)', display: 'block', marginBottom: '4px' }}>
+              <label htmlFor="create-meal-protein" style={{ fontSize: '0.78rem', fontWeight: '600', color: 'var(--slate-mid)', display: 'block', marginBottom: '4px' }}>
                 Protein
               </label>
               <input
+                id="create-meal-protein"
                 className="input"
                 type="number"
                 min="0"
