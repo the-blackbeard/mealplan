@@ -5,7 +5,7 @@ import { useMealPlan } from '../hooks/useMealPlan'
 import WeekGrid from '../components/WeekGrid'
 import MealsSidebar from '../components/MealsSidebar'
 
-export function makeDragEndHandler(upsertEntry) {
+export function makeDragEndHandler(addEntry) {
   return function handleDragEnd({ active, over }) {
     if (!over) return
     const meal = active.data?.current?.meal
@@ -13,17 +13,17 @@ export function makeDragEndHandler(upsertEntry) {
     const parts = over.id.split('-') // ['drop', '2', 'lunch']
     const dayIndex = parseInt(parts[1], 10)
     const slot = parts[2]
-    upsertEntry(dayIndex, slot, meal.id, null)
+    addEntry(dayIndex, slot, meal.id)
   }
 }
 
 export default function PlannerPage() {
   const [weekStart, setWeekStart] = useState(getWeekStart())
-  const { loading, error, upsertEntry, clearEntry, getEntry } = useMealPlan(weekStart)
+  const { loading, error, addEntry, removeEntry, getEntries } = useMealPlan(weekStart)
   const [activeMeal, setActiveMeal] = useState(null)
   const isThisWeek = isCurrentWeek(weekStart)
 
-  const handleDragEnd = makeDragEndHandler(upsertEntry)
+  const handleDragEnd = makeDragEndHandler(addEntry)
 
   return (
     <div style={{ maxWidth: '1500px', margin: '0 auto', padding: '32px 24px' }}>
@@ -106,9 +106,9 @@ export default function PlannerPage() {
             <div className="card" style={{ flex: 1, minWidth: 0, padding: '24px' }}>
               <WeekGrid
                 weekStart={weekStart}
-                onUpsert={upsertEntry}
-                onClear={clearEntry}
-                getEntry={getEntry}
+                onAdd={addEntry}
+                onRemove={removeEntry}
+                getEntries={getEntries}
                 editable={true}
               />
             </div>
@@ -138,7 +138,7 @@ export default function PlannerPage() {
       )}
 
       <p style={{ marginTop: '16px', fontSize: '0.8rem', color: 'var(--slate-light)', textAlign: 'center' }}>
-        Drag meals from the sidebar onto any slot · Click a cell to use the picker · Changes sync in real time
+        Drag meals from the sidebar onto any slot · Click a cell to manage meals · Changes sync in real time
       </p>
     </div>
   )
