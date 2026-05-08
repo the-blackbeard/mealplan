@@ -21,12 +21,15 @@ export default function MealCell({ slot, dayIndex, dayLabel, entries = [], onAdd
     <>
       <div
         ref={setNodeRef}
+        role="button"
+        aria-label={`${meta.label} for ${dayLabel}`}
         onClick={() => editable && setModalOpen(true)}
         style={{
           minHeight: '72px',
           padding: '10px 12px',
           borderRadius: '10px',
-          border: `1.5px solid ${isOver ? meta.color : (hasEntries ? 'transparent' : 'var(--cream-mid)')}`,
+          borderWidth: '1.5px',
+          borderStyle: 'solid',
           borderColor: isOver ? meta.color : (hasEntries ? 'transparent' : 'var(--cream-mid)'),
           background: hasEntries || isOver ? meta.bg : 'var(--cream)',
           cursor: editable ? 'pointer' : 'default',
@@ -42,7 +45,7 @@ export default function MealCell({ slot, dayIndex, dayLabel, entries = [], onAdd
         onMouseEnter={e => {
           if (editable && !isOver) {
             e.currentTarget.style.borderColor = meta.color
-            e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.06)'
+            e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.06)' // subtle lift, no token
           }
         }}
         onMouseLeave={e => {
@@ -76,7 +79,7 @@ export default function MealCell({ slot, dayIndex, dayLabel, entries = [], onAdd
                   fontSize: '0.72rem',
                   fontWeight: '600',
                   color: meta.color,
-                  background: 'rgba(255,255,255,0.7)',
+                  background: 'rgba(255,255,255,0.7)', // semi-transparent white overlay, no token
                   borderRadius: '10px',
                   padding: '1px 7px',
                   alignSelf: 'flex-start',
