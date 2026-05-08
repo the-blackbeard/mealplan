@@ -120,4 +120,13 @@ describe('SlotModal create view', () => {
     expect(screen.getByText('New Meal')).toBeInTheDocument()
     expect(screen.getByDisplayValue('Poha')).toBeInTheDocument()
   })
+
+  it('stays on create view and the form is still visible after failed submit', async () => {
+    renderModal({ entries: [] })
+    fireEvent.click(screen.getByText(/Add a meal/))
+    fireEvent.change(screen.getByPlaceholderText('Search meals…'), { target: { value: 'xyz' } })
+    fireEvent.click(screen.getByText(/Create "xyz" as new meal/))
+    expect(screen.getByText('New Meal')).toBeInTheDocument()
+    expect(screen.getByPlaceholderText(/Meal name/i)).toBeInTheDocument()
+  })
 })

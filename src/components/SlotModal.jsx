@@ -12,6 +12,8 @@ export default function SlotModal({ slot, dayIndex, dayLabel, entries, onAdd, on
   const [mode, setMode] = useState('list') // 'list' | 'search' | 'create'
   const [search, setSearch] = useState('')
   const [createForm, setCreateForm] = useState({ name: '', description: '', recipe: '', calories: '', protein: '' })
+  const [createError, setCreateError] = useState('')
+  const [saving, setSaving] = useState(false)
   const searchRef = useRef(null)
   const navigate = useNavigate()
   const { meals, createMeal } = useMeals()
@@ -46,20 +48,28 @@ export default function SlotModal({ slot, dayIndex, dayLabel, entries, onAdd, on
     setSearch('')
   }
 
+  const emptyForm = { name: '', description: '', recipe: '', calories: '', protein: '' }
+
   async function handleCreate(e) {
     e.preventDefault()
-    const { data, error } = await createMeal(createForm.name, {
+    if (!createForm.name.trim()) return
+    setSaving(true)
+    setCreateError('')
+    const { data, error } = await createMeal(createForm.name.trim(), {
       description: createForm.description,
       recipe: createForm.recipe,
-      caloriesPerPortion: createForm.calories ? Number(createForm.calories) : null,
-      proteinPerPortion: createForm.protein ? Number(createForm.protein) : null,
+      caloriesPerPortion: createForm.calories ? parseInt(createForm.calories) : null,
+      proteinPerPortion: createForm.protein ? parseInt(createForm.protein) : null,
     })
-    if (!error && data) {
+    if (error) {
+      setCreateError(error.message)
+    } else if (data) {
       await onAdd(dayIndex, slot, data.id)
+      setMode('list')
+      setSearch('')
+      setCreateForm(emptyForm)
     }
-    setMode('list')
-    setSearch('')
-    setCreateForm({ name: '', description: '', recipe: '', calories: '', protein: '' })
+    setSaving(false)
   }
 
   function goToSearch() {
@@ -410,7 +420,10 @@ export default function SlotModal({ slot, dayIndex, dayLabel, entries, onAdd, on
             </div>
           </div>
 
-          <button type="submit" className="btn btn-primary" style={{ marginTop: '2px', justifyContent: 'center' }}>
+          {createError && (
+            <p style={{ color: 'var(--rust)', fontSize: '0.8rem', margin: 0 }}>{createError}</p>
+          )}
+          <button type="submit" className="btn btn-primary" disabled={saving} style={{ marginTop: '2px', justifyContent: 'center' }}>
             Save &amp; Add to Plan
           </button>
         </form>
