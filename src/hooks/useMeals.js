@@ -40,10 +40,18 @@ export function useMeals() {
     return { data, error }
   }
 
-  async function updateMeal(id, fields) {
+  async function updateMeal(id, { name, description, recipe, caloriesPerPortion, proteinPerPortion } = {}) {
+    if (!household || !user) return { error: 'Not authenticated' }
+    const payload = {}
+    if (name !== undefined) payload.name = name.trim()
+    if (description !== undefined) payload.description = description
+    if (recipe !== undefined) payload.recipe = recipe || null
+    if (caloriesPerPortion !== undefined) payload.calories_per_portion = caloriesPerPortion
+    if (proteinPerPortion !== undefined) payload.protein_per_portion = proteinPerPortion
+
     const { data, error } = await supabase
       .from('meals')
-      .update(fields)
+      .update(payload)
       .eq('id', id)
       .select()
       .single()
